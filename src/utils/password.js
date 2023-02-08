@@ -4,4 +4,8 @@ const encryptPassword = async (password) => {
   const _encryptedPassword = await bcrypt.hash(password, 10);
   return _encryptedPassword;
 };
-module.exports = { encryptPassword };
+const checkEncryptedPassword = async (encryptedPassword, password) => {
+  let b = await bcrypt.compare(password, encryptedPassword);
+  return b;
+};
+module.exports = { encryptPassword, checkEncryptedPassword };
