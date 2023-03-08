@@ -8,7 +8,8 @@ const createUser = async (_userName, _password) => {
   try {
     const encryptedPassword = await passwordUtil.encryptPassword(_password);
     const user = await Users.create({ username: _userName, password: encryptedPassword });
-    return user.dataValues;
+    const newUser = await Users.findOne({ where: { username: user.username }, attributes: ['id', 'username', 'createdAt', 'updatedAt'] });
+    return newUser;
   } catch (error) {
     if (error instanceof UniqueConstraintError) {
       console.log('Error');
