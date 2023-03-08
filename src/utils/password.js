@@ -5,7 +5,7 @@ const encryptPassword = async (password) => {
   return _encryptedPassword;
 };
 const checkEncryptedPassword = async (encryptedPassword, password) => {
-  let b = await bcrypt.compare(password, encryptedPassword);
-  return b;
+  let isSame = await bcrypt.compare(password, encryptedPassword);
+  return isSame;
 };
 module.exports = { encryptPassword, checkEncryptedPassword };

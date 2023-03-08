@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const redisClient = require('../utils/redis');
 
-const generateToken = async (_userName) => {
+const generateToken = async (id) => {
   let token = await jwt.sign(
-    { userName: _userName },
-    'secretkeyappearshere',
+    { id: id },
+    process.env.JWT_SECRET,
     { expiresIn: '1h' }
   );
 
@@ -14,7 +15,7 @@ const generateToken = async (_userName) => {
 };
 const verifyToken = async (token) => {
   try {
-    const decodedToken = await jwt.verify(token, 'secretkeyappearshere');
+    const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
     const tokenInRedis = await redisClient.get(token);
     if (decodedToken && tokenInRedis != undefined)
       return true;

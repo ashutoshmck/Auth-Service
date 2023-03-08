@@ -1,33 +1,11 @@
-// const redis = require('redis');
-// class RedisClient {
-//   constructor() {
-//     this.redisConnection = redis.createClient();
-//     console.log('Connection Eastblished ');
-//   }
-//   getCacheValue(key) {
-//     try {
-//       this.redisConnection.get(key, (err, res) => {
-//         if (err) {
-//           console.log('error');
-//         }
-//         return res;
-//       });
-//     } catch (e) {
-//       console.log('error in get catch');
-//     }
-//   }
-//   setCacheValue(key, value) {
-//     try {
-//       this.redisConnection.set(key, value);
-//     } catch (e) {
-//       console.error('erorr in set cache');
-//     }
-//   }
-// }
-// module.exports = new RedisClient();
+require('dotenv').config();
 const { createClient } = require('redis');
 
-let client = createClient();
+let client = createClient({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  password: process.env.REDIS_PASSWORD
+});
 
 client.on('error', err => console.log('Redis Client Error', err));
 const get = async (key) => {
@@ -51,4 +29,4 @@ const set = async (key, value) => {
     console.log('error in set catch');
   }
 };
-module.exports = { get, set };
+module.exports = { get, set, client };
