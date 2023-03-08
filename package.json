@@ -4,6 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "db:up": "sequelize db:migrate",
+    "db:down": "sequelize db:migrate:undo:all",
+    "seed:up": "sequelize db:seed:all",
+    "seed:down": "sequelize db:seed:undo:all",
+    "start:server": "node ./src/app.js",
+    "start": "npm run db:up && npm run seed:up && npm run start:server",
     "test": "jest"
   },
   "keywords": [],
@@ -11,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "joi": "^17.7.0",
     "jsonwebtoken": "^9.0.0",
