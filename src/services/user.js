@@ -15,13 +15,14 @@ const createUser = async (_userName, _password) => {
       console.log('Error');
       throw new HTTPError('Username already exists', 400);
     }
-    throw new HTTPError(500, 'Internal server error', 500);
+    throw new HTTPError('Internal server error', 500);
   }
 
 };
 
 const loginUser = async (_userName, _password) => {
   const user = await Users.findOne({ where: { username: _userName } });
+
   if (!user)
     throw new HTTPError('User not found', 400);
 
@@ -29,14 +30,14 @@ const loginUser = async (_userName, _password) => {
   if (!checkIfPasswordIsValid)
     throw new HTTPError('Invalid password', 401);
   const newToken = await tokenUtil.generateToken(user.id);
-  return { user, token: newToken };
+  return newToken;
 };
 
 const checkValidityOfToken = async (token) => {
-  const isVerified = await tokenUtil.verifyToken(token);
-  if (!isVerified)
+  const decodedToken = await tokenUtil.verifyToken(token);
+  if (!decodedToken)
     throw new HTTPError('Invalid token', 401);
-  return true;
+  return decodedToken;
 };
 
 module.exports = { createUser, loginUser, checkValidityOfToken };

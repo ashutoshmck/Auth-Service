@@ -18,7 +18,7 @@ const verifyToken = async (token) => {
     const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
     const tokenInRedis = await redisClient.get(token);
     if (decodedToken && tokenInRedis != undefined)
-      return true;
+      return decodedToken;
   } catch (error) {
     return false;
   }

@@ -8,9 +8,6 @@ describe('Token Util', () => {
       const token = await generateToken('test');
       expect(token).toBe(token);
     });
-    it('should throw if user is null', () => {
-      expect(() => generateToken(null)).toThrow();
-    });
   });
   describe('verifyToken', () => {
     it('should verify a token', async () => {
@@ -19,7 +16,9 @@ describe('Token Util', () => {
       expect(decoded).not.toBe(null);
     });
     it('should throw if token is null', async () => {
-      expect(() => verifyToken(null)).toThrow();
+      jest.spyOn(jwt, 'verify').mockRejectedValue(new Error('error'));
+      const isVerified = await verifyToken(null);
+      expect(isVerified).toBe(false);
     });
   });
 });

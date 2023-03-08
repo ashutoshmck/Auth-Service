@@ -12,8 +12,8 @@ const createUser = async (request, response) => {
 };
 const loginUser = async (request, response) => {
   try {
-    const user = await UserService.loginUser(request.body.username, request.body.password);
-    return response.status(200).json(user);
+    const token = await UserService.loginUser(request.body.username, request.body.password);
+    return response.status(200).json(token);
   } catch (error) {
     if (error instanceof HTTPError)
       return response.status(error.code).json(error.message);
@@ -23,8 +23,8 @@ const loginUser = async (request, response) => {
 const checkValidityOfToken = async (request, response) => {
   try {
     const token = request.headers.authorization.split(' ')[1];
-    await UserService.checkValidityOfToken(token);
-    return response.status(200).json('Token Verified');
+    const decodedToken = await UserService.checkValidityOfToken(token);
+    return response.status(200).json(decodedToken);
   } catch (error) {
     if (error instanceof HTTPError)
       return response.status(error.code).json(error.message);

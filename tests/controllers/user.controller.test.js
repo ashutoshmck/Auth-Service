@@ -26,11 +26,7 @@ describe('User Controller', () => {
       UserService.createUser = jest.fn().mockReturnValue(mockUser);
       await UserController.createUser(req, res, next);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 201,
-        data: mockUser,
-        message: 'Succesfully Created User'
-      });
+      expect(res.json).toHaveBeenCalledWith(mockUser);
     });
 
     it('should return 400 status code if user with same username already exists', async () => {
@@ -49,10 +45,7 @@ describe('User Controller', () => {
       UserService.createUser = jest.fn().mockRejectedValue(mockError);
       await UserController.createUser(req, res, next);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 400,
-        message: 'User with this username already exists'
-      });
+      expect(res.json).toHaveBeenCalledWith('User with this username already exists');
     });
 
     it('should return 500 status code if creating user in database fails', async () => {
@@ -71,10 +64,7 @@ describe('User Controller', () => {
       UserService.createUser = jest.fn().mockRejectedValue(mockError);
       await UserController.createUser(req, res, next);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 500,
-        message: 'Error creating user'
-      });
+      expect(res.json).toHaveBeenCalledWith('Error creating user');
     });
   });
   describe('loginUser', () => {
@@ -100,11 +90,7 @@ describe('User Controller', () => {
       UserService.loginUser = jest.fn().mockReturnValue(mockUser);
       await UserController.loginUser(req, res, next);
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 200,
-        data: mockUser,
-        message: 'Succesfully Logged in'
-      });
+      expect(res.json).toHaveBeenCalledWith(mockUser);
     });
     it('should return 400 status code if user with given username does not exist', async () => {
 
@@ -123,10 +109,7 @@ describe('User Controller', () => {
       UserService.loginUser = jest.fn().mockRejectedValue(mockError);
       await UserController.loginUser(req, res, next);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 400,
-        message: 'User with this username does not exist'
-      });
+      expect(res.json).toHaveBeenCalledWith('User with this username does not exist');
     });
     it('should return 400 status code if password is incorrect', async () => {
       const req = {
@@ -144,10 +127,7 @@ describe('User Controller', () => {
       UserService.loginUser = jest.fn().mockRejectedValue(mockError);
       await UserController.loginUser(req, res, next);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 400,
-        message: 'Password is incorrect'
-      });
+      expect(res.json).toHaveBeenCalledWith('Password is incorrect');
     });
     it('should return 500 status code if logging in user in database fails', async () => {
       const req = {
@@ -165,166 +145,10 @@ describe('User Controller', () => {
       UserService.loginUser = jest.fn().mockRejectedValue(mockError);
       await UserController.loginUser(req, res, next);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 500,
-        message: 'Error logging in user'
-      });
+      expect(res.json).toHaveBeenCalledWith('Error logging in user');
     });
   });
-  // describe('getUser', () => {
-  //   it('should return 200 status code when user is successfully retrieved', async () => {
-  //     const req = {
-  //       params: {
-  //         id: 1
-  //       }
-  //     };
-  //     const res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn().mockReturnThis()
-  //     };
-  //     const next = jest.fn();
-  //     const mockUser = {
-  //       id: 1,
-  //       username: 'test',
-  //       password: 'test',
-  //       createdAt: '2021-01-01',
-  //       updatedAt: '2021-01-01'
-  //     };
-  //     UserService.getUser = jest.fn().mockReturnValue(mockUser);
-  //     await UserController.getUser(req, res, next);
-  //     expect(res.status).toHaveBeenCalledWith(200);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       status: 200,
-  //       data: mockUser,
-  //       message: 'Succesfully Retrieved User'
-  //     });
-  //   });
-  //   it('should return 400 status code if user with given id does not exist', async () => {
-  //     const req = {
-  //       params: {
-  //         id: 1
-  //       }
-  //     };
-  //     const res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn().mockReturnThis()
-  //     };
-  //     const next = jest.fn();
-  //     const mockError = new HTTPError('User with this id does not exist', 400);
-  //     UserService.getUser = jest.fn().mockRejectedValue(mockError);
-  //     await UserController.getUser(req, res, next);
-  //     expect(res.status).toHaveBeenCalledWith(400);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       status: 400,
-  //       message: 'User with this id does not exist'
-  //     });
-  //   });
-  //   it('should return 500 status code if retrieving user in database fails', async () => {
-  //     const req = {
-  //       params: {
-  //         id: 1
-  //       }
-  //     };
-  //     const res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn().mockReturnThis()
-  //     };
-  //     const next = jest.fn();
-  //     const mockError = new Error('Error retrieving user');
-  //     UserService.getUser = jest.fn().mockRejectedValue(mockError);
-  //     await UserController.getUser(req, res, next);
-  //     expect(res.status).toHaveBeenCalledWith(500);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       status: 500,
-  //       message: 'Error retrieving user'
-  //     });
 
-  //   });
-  // });
-  // describe('updateUser', () => {
-  //   it('should return 200 status code when user is successfully updated', async () => {
-  //     const req = {
-  //       params: {
-  //         id: 1
-  //       },
-  //       body: {
-  //         username: 'test',
-  //         password: 'test'
-  //       }
-  //     };
-  //     const res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn().mockReturnThis()
-  //     };
-  //     const next = jest.fn();
-  //     const mockUser = {
-  //       id: 1,
-  //       username: 'test',
-  //       password: 'test',
-  //       createdAt: '2021-01-01',
-  //       updatedAt: '2021-01-01'
-  //     };
-  //     UserService.updateUser = jest.fn().mockReturnValue(mockUser);
-  //     await UserController.updateUser(req, res, next);
-  //     expect(res.status).toHaveBeenCalledWith(200);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       status: 200,
-  //       data: mockUser,
-  //       message: 'Succesfully Updated User'
-  //     });
-
-  //   });
-
-  //   it('should return 400 status code if user with given id does not exist', async () => {
-  //     const req = {
-  //       params: {
-  //         id: 1
-  //       },
-  //       body: {
-  //         username: 'test',
-  //         password: 'test'
-  //       }
-  //     };
-  //     const res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn().mockReturnThis()
-  //     };
-  //     const next = jest.fn();
-  //     const mockError = new HTTPError('User with this id does not exist', 400);
-  //     UserService.updateUser = jest.fn().mockRejectedValue(mockError);
-  //     await UserController.updateUser(req, res, next);
-  //     expect(res.status).toHaveBeenCalledWith(400);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       status: 400,
-  //       message: 'User with this id does not exist'
-  //     });
-  //   });
-
-  //   it('should return 500 status code if updating user in database fails', async () => {
-  //     const req = {
-  //       params: {
-  //         id: 1
-  //       },
-  //       body: {
-  //         username: 'test',
-  //         password: 'test'
-  //       }
-  //     };
-  //     const res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn().mockReturnThis()
-  //     };
-  //     const next = jest.fn();
-  //     const mockError = new Error('Error updating user');
-  //     UserService.updateUser = jest.fn().mockRejectedValue(mockError);
-  //     await UserController.updateUser(req, res, next);
-  //     expect(res.status).toHaveBeenCalledWith(500);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       status: 500,
-  //       message: 'Error updating user'
-  //     });
-  //   });
-  // });
   describe('checkValidityOfToken', () => {
     it('should return 200 status code when token is valid', async () => {
       const req = {
@@ -337,20 +161,10 @@ describe('User Controller', () => {
         json: jest.fn().mockReturnThis()
       };
       const next = jest.fn();
-      const mockUser = {
-        id: 1,
-        username: 'test',
-        password: 'test',
-        createdAt: '2021-01-01',
-        updatedAt: '2021-01-01'
-      };
-      UserService.checkValidityOfToken = jest.fn().mockReturnValue(mockUser);
+      UserService.checkValidityOfToken = jest.fn().mockReturnValue('token');
       await UserController.checkValidityOfToken(req, res, next);
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 200,
-        message: 'Token Verified'
-      });
+      expect(res.json).toHaveBeenCalledWith('token');
     });
 
     it('should return 401 status code if token is invalid', async () => {
@@ -368,10 +182,7 @@ describe('User Controller', () => {
       UserService.checkValidityOfToken = jest.fn().mockRejectedValue(mockError);
       await UserController.checkValidityOfToken(req, res, next);
       expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 401,
-        message: 'Token is invalid'
-      });
+      expect(res.json).toHaveBeenCalledWith('Token is invalid');
     });
 
     it('should return 500 status code if checking validity of token fails', async () => {
@@ -389,12 +200,8 @@ describe('User Controller', () => {
       UserService.checkValidityOfToken = jest.fn().mockRejectedValue(mockError);
       await UserController.checkValidityOfToken(req, res, next);
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 500,
-        message: 'Error checking validity of token'
-      });
+      expect(res.json).toHaveBeenCalledWith('Error checking validity of token');
     });
-
   }
   );
 });
